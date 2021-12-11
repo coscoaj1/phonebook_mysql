@@ -1,5 +1,11 @@
-GET http://localhost:3001/api/persons/all
+GET http://localhost:3001/api/people/all
 
 
 ###
-POST http://localhost:3001/api/persons
+POST http://localhost:3001/api/people
+Content-Type: application/json
+
+{
+	"name": "William Porter",
+    "phoneNumber": "828-298-6006"
+}
