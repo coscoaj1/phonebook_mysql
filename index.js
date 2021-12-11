@@ -1,8 +1,30 @@
 require('dotenv').config();
+const sequelize = require('./utils/database');
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const Person = require('./models/person');
+
+const Person = require('./models/Person');
+
+async function connectDB() {
+	try {
+		await sequelize.authenticate();
+		console.log('Connection has been established successfully.');
+	} catch (error) {
+		console.error('Unable to connect to the database:', error);
+	}
+}
+
+connectDB();
+
+sequelize
+	.sync()
+	.then((result) => {
+		console.log(result);
+	})
+	.catch((error) => {
+		console.error('sync error', error);
+	});
 
 app.use(express.json());
 app.use(express.static('build'));
@@ -14,37 +36,37 @@ morgan.token('body', (req) => JSON.stringify(req.body));
 app.use(morgan(':url :method :response-time ms :body'));
 
 app.get('/api/persons', (request, response) => {
-	Person.find({}).then((persons) => {
-		response.json(persons);
-	});
+	// Person.find({}).then((persons) => {
+	// 	response.json(persons);
+	// });
 });
 
 app.get(`/api/persons/:id`, (request, response, next) => {
-	Person.findById({ _id: request.params.id })
-		.then((result) => {
-			response.json(result);
-		})
-		.catch((error) => next(error));
+	// Person.findById({ _id: request.params.id })
+	// 	.then((result) => {
+	// 		response.json(result);
+	// 	})
+	// 	.catch((error) => next(error));
 });
 
 app.get(`/info`, (request, response) => {
-	const date = new Date();
-	Person.find({}, { __v: 0 }).then((persons) => {
-		response.send(
-			`<p>Phonebook has info for ${persons.length} people</p> <p>${Date()}</p>`
-		);
-	});
-	console.log(date);
+	// const date = new Date();
+	// Person.find({}, { __v: 0 }).then((persons) => {
+	// 	response.send(
+	// 		`<p>Phonebook has info for ${persons.length} people</p> <p>${Date()}</p>`
+	// 	);
+	// });
+	// console.log(date);
 });
 
 app.delete(`/api/persons/:id`, (request, response) => {
-	Person.deleteOne({ _id: request.params.id }).then((deletedPerson) => {
-		if (deletedPerson) {
-			response.status(204).end();
-		} else {
-			response(404).end();
-		}
-	});
+	// Person.deleteOne({ _id: request.params.id }).then((deletedPerson) => {
+	// 	if (deletedPerson) {
+	// 		response.status(204).end();
+	// 	} else {
+	// 		response(404).end();
+	// 	}
+	// });
 });
 
 app.post(`/api/persons`, (request, response, next) => {
@@ -117,7 +139,7 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT;
+const PORT = 3001;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
