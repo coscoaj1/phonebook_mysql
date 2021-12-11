@@ -1,20 +1,22 @@
-require('dotenv').config();
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
 const app = express();
-const peopleRouter = require('./controllers/people');
+const peopleRouter = require("./controllers/people");
+const sequelize = require("./utils/database");
+const cors = require("cors");
+const morgan = require("morgan");
 
-const sequelize = require('./utils/database');
-
+app.use(cors());
 app.use(express.json());
 
-app.use('/api/people', peopleRouter);
+morgan.token("body", (req) => JSON.stringify(req.body));
+app.use(morgan(":url :method :response-time ms :body"));
 
-const cors = require('cors');
-app.use(cors());
+app.use("/api/people", peopleRouter);
 
 const PORT = 3001;
 sequelize.sync().then(() => {
-	app.listen(PORT, () => {
-		console.log(`Server running on port ${PORT}`);
-	});
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 });
