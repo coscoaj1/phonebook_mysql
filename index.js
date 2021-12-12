@@ -14,7 +14,7 @@ app.use(morgan(":url :method :response-time ms :body"));
 
 app.use("/api/people", peopleRouter);
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
