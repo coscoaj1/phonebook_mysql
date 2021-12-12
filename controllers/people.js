@@ -29,11 +29,6 @@ peopleRouter.post("/", async (req, res) => {
 peopleRouter.put("/:id", async (req, res) => {
   const body = req.body;
 
-  // const person = {
-  //   name: body.name,
-  //   number: body.phoneNumber,
-  // };
-
   const updatedPerson = await Person.update(
     { name: body.name, phoneNumber: body.phoneNumber },
     {
@@ -42,7 +37,9 @@ peopleRouter.put("/:id", async (req, res) => {
       },
     }
   );
-  res.status(200).json(updatedPerson);
+  const returnUpdatedPerson = await Person.findByPk(req.params.id);
+  if (!returnUpdatedPerson) throw "Error while Fetching Data";
+  res.status(200).json(returnUpdatedPerson);
 });
 
 module.exports = peopleRouter;
