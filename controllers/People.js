@@ -37,9 +37,9 @@ peopleRouter.put("/:id", async (req, res) => {
       },
     }
   );
-  const returnUpdatedPerson = await Person.findByPk(req.params.id);
-  if (!returnUpdatedPerson) throw "Error while Fetching Data";
-  res.status(200).json(returnUpdatedPerson);
+  const returnUpdatedPerson = await Person.findByPk(req.params.id); // finds the updated row
+  if (!returnUpdatedPerson) throw "Error while Fetching Data"; //catches errors.
+  res.status(200).json(returnUpdatedPerson); //returns it
 });
 
 module.exports = peopleRouter;
